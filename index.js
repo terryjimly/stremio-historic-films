@@ -80,7 +80,7 @@ addon.defineCatalogHandler(args => {
 						body = JSON.parse(body)
 					} catch(e) {}
 				if (((body || {}).response || {}).numFound) {
-					resolve({ metas: body.response.docs.map(toMeta.bind(this, args.extra.search)), cacheMaxAge: config.cacheTime })
+					resolve({ metas: body.response.docs.map(toMeta.bind(this, args.extra.search)), cacheMaxAge: config.cacheTime / 1000 })
 				} else {
 					reject('Bad search API response for: ' + args.extra.search)
 				}
@@ -109,7 +109,7 @@ addon.defineMetaHandler(args => {
 	return new Promise((resolve, reject) => {
 		queue.push({ id: args.id }, meta => {
 			if (meta)
-				resolve({ meta, cacheMaxAge: config.cacheTime })
+				resolve({ meta, cacheMaxAge: config.cacheTime / 1000 })
 			else
 				reject('Bad meta API response for: ' + args.id)
 		})
@@ -120,7 +120,7 @@ addon.defineStreamHandler(args => {
 	return new Promise((resolve, reject) => {
 		queue.push({ id: args.id }, meta => {
 			if (meta)
-				resolve({ streams: meta.streams, cacheMaxAge: config.cacheTime })
+				resolve({ streams: meta.streams, cacheMaxAge: config.cacheTime / 1000 })
 			else
 				reject('Bad meta API response for: ' + args.id)
 		})
